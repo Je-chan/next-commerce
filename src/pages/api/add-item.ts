@@ -12,6 +12,7 @@ const notion = new Client({
 const databaseId = '04987d39c6b840d3889a754d535ea778'
 
 async function addItem(name: string) {
+  console.log('errorItem')
   try {
     const res = await notion.pages.create({
       parent: { database_id: databaseId },
@@ -35,8 +36,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  console.log('HEEEEEEE')
   const { name } = req.query
-
+  console.log(name)
   if (name === null) {
     return res.status(400).json({ message: `NO name` })
   }
