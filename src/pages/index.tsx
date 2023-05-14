@@ -8,7 +8,7 @@ interface Product {
   id: string
   properties: {
     id: string
-  }
+  }[]
 }
 
 export default function Home() {
@@ -46,9 +46,21 @@ export default function Home() {
             <div key={item.id}>
               {JSON.stringify(item)}
               {Object.entries(item.properties).map(([key, value]) => (
-                <button key={key}></button>
+                <button
+                  key={key}
+                  onClick={() => {
+                    fetch(
+                      `/api/get-detail?pageId=${item.id}&propertyId=${value.id}`
+                    )
+                      .then((res) => res.json())
+                      .then((data) => alert(JSON.stringify(data.detail)))
+                  }}
+                >
+                  {key}
+                </button>
               ))}
-              <br /> <br />
+              <br />
+              <br />
             </div>
           ))}
       </div>
