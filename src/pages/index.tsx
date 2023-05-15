@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 interface Product {
   id: string
   name: string
+  createdAt: string
 }
 
 export default function Home() {
@@ -46,7 +47,11 @@ export default function Home() {
       <div>
         <p>product list</p>
         {products &&
-          products.map((item) => <div key={item.id}>{item.name}</div>)}
+          products.map((item) => (
+            <div key={item.id}>
+              {item.name} {item.createdAt}
+            </div>
+          ))}
         {/*{products &&*/}
         {/*  products.map((item) => (*/}
         {/*    <div key={item.id}>*/}
