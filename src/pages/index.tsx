@@ -6,15 +6,19 @@ const inter = Inter({ subsets: ['latin'] })
 
 interface Product {
   id: string
-  properties: {
-    id: string
-  }[]
+  name: string
 }
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
+  // useEffect(() => {
+  //   fetch('/api/get-items')
+  //     .then((res) => res.json())
+  //     .then((data) => setProducts(data.items))
+  // }, [])
+
   useEffect(() => {
-    fetch('/api/get-items')
+    fetch('/api/get-products')
       .then((res) => res.json())
       .then((data) => setProducts(data.items))
   }, [])
@@ -42,27 +46,29 @@ export default function Home() {
       <div>
         <p>product list</p>
         {products &&
-          products.map((item) => (
-            <div key={item.id}>
-              {JSON.stringify(item)}
-              {Object.entries(item.properties).map(([key, value]) => (
-                <button
-                  key={key}
-                  onClick={() => {
-                    fetch(
-                      `/api/get-detail?pageId=${item.id}&propertyId=${value.id}`
-                    )
-                      .then((res) => res.json())
-                      .then((data) => alert(JSON.stringify(data.detail)))
-                  }}
-                >
-                  {key}
-                </button>
-              ))}
-              <br />
-              <br />
-            </div>
-          ))}
+          products.map((item) => <div key={item.id}>{item.name}</div>)}
+        {/*{products &&*/}
+        {/*  products.map((item) => (*/}
+        {/*    <div key={item.id}>*/}
+        {/*      {JSON.stringify(item)}*/}
+        {/*      {Object.entries(item.properties).map(([key, value]) => (*/}
+        {/*        <button*/}
+        {/*          key={key}*/}
+        {/*          onClick={() => {*/}
+        {/*            fetch(*/}
+        {/*              `/api/get-detail?pageId=${item.id}&propertyId=${value.id}`*/}
+        {/*            )*/}
+        {/*              .then((res) => res.json())*/}
+        {/*              .then((data) => alert(JSON.stringify(data.detail)))*/}
+        {/*          }}*/}
+        {/*        >*/}
+        {/*          {key}*/}
+        {/*        </button>*/}
+        {/*      ))}*/}
+        {/*      <br />*/}
+        {/*      <br />*/}
+        {/*    </div>*/}
+        {/*  ))}*/}
       </div>
     </>
   )
