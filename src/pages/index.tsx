@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { useRef, useState, useEffect } from 'react'
+import { css } from '@emotion/react'
+import Button from '@components/Button'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -46,34 +48,23 @@ export default function Home() {
 
       <div>
         <p>product list</p>
+        <button
+          css={css`
+            background-color: hotpink;
+            padding: 1rem;
+            border-radius: 0.5rem;
+          `}
+          onClick={handleClick}
+        >
+          ADD Jacket
+        </button>
+        <Button onClick={handleClick}>Add Jacket 2</Button>
         {products &&
           products.map((item) => (
             <div key={item.id}>
               {item.name} {item.createdAt}
             </div>
           ))}
-        {/*{products &&*/}
-        {/*  products.map((item) => (*/}
-        {/*    <div key={item.id}>*/}
-        {/*      {JSON.stringify(item)}*/}
-        {/*      {Object.entries(item.properties).map(([key, value]) => (*/}
-        {/*        <button*/}
-        {/*          key={key}*/}
-        {/*          onClick={() => {*/}
-        {/*            fetch(*/}
-        {/*              `/api/get-detail?pageId=${item.id}&propertyId=${value.id}`*/}
-        {/*            )*/}
-        {/*              .then((res) => res.json())*/}
-        {/*              .then((data) => alert(JSON.stringify(data.detail)))*/}
-        {/*          }}*/}
-        {/*        >*/}
-        {/*          {key}*/}
-        {/*        </button>*/}
-        {/*      ))}*/}
-        {/*      <br />*/}
-        {/*      <br />*/}
-        {/*    </div>*/}
-        {/*  ))}*/}
       </div>
     </>
   )
