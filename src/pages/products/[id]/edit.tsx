@@ -3,8 +3,10 @@ import Carousel from 'nuka-carousel'
 import Image from 'next/image'
 // eslint-disable-next-line @next/next/no-document-import-in-page
 import { Head } from 'next/document'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CustomEditor from '@components/Editor'
+import { useRouter } from 'next/router'
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js'
 
 const images = [
   {
@@ -23,6 +25,47 @@ const images = [
 
 export default function Index() {
   const [index, setIndex] = useState(0)
+  const router = useRouter()
+  const { id: productId } = router.query
+  const [editorState, setEditorState] = useState<EditorState | undefined>(
+    undefined
+  )
+
+  const handleSave = () => {
+    if (editorState) {
+      fetch(`/api/update-product`, {
+        method: 'POST',
+        body: JSON.stringify({
+          id: productId,
+          contents: JSON.stringify(
+            convertToRaw(editorState.getCurrentContent())
+          ),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          alert('SUCCESS')
+        })
+    }
+  }
+
+  useEffect(() => {
+    if (productId != null) {
+      fetch(`/api/get-product?id=${productId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.items.contents) {
+            setEditorState(
+              EditorState.createWithContent(
+                convertFromRaw(JSON.parse(data.items.contents))
+              )
+            )
+          } else {
+            setEditorState(EditorState.createEmpty())
+          }
+        })
+    }
+  }, [productId])
   return (
     <>
       <Carousel
@@ -50,7 +93,13 @@ export default function Index() {
           </div>
         ))}
       </div>
-      <CustomEditor />
+      {editorState != null && (
+        <CustomEditor
+          editorState={editorState}
+          onEditorStateChange={setEditorState}
+          onSave={handleSave}
+        />
+      )}
     </>
   )
 }
